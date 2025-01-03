@@ -1,0 +1,19 @@
+# Etapa de configuración de Nginx
+FROM nginx:alpine
+
+# Copiar los archivos 'dist' generados por el script
+COPY ./dist-production/home /usr/share/nginx/html/inicio
+COPY ./dist-production/rentas /usr/share/nginx/html/rentas
+COPY ./dist-production/comercio /usr/share/nginx/html/comercio
+COPY ./dist-production/compras /usr/share/nginx/html/compras
+COPY ./dist-production/errores /usr/share/nginx/html/errores
+COPY ./dist-production/institucional /usr/share/nginx/html/institucional
+COPY ./dist-production/rrhh /usr/share/nginx/html/rrhh
+COPY ./dist-production/vivienda /usr/share/nginx/html/vivienda
+COPY ./dist-production/support /usr/share/nginx/html/support
+
+# Exponer el puerto 80
+EXPOSE 80
+
+# Comando para iniciar Nginx
+CMD ["nginx", "-g", "daemon off;"]

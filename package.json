@@ -1,6 +1,6 @@
 {
   "name": "monorepo",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -10,7 +10,8 @@
     "start": "node scripts/start.js",
     "build:staging": "node scripts/build-staging.js",
     "build:prod": "node scripts/build-prod.js",
-    "publish:dev": "./publish-release-dev.sh"
+    "publish:rc": "./publish-rc.sh",
+    "publish": "./publish.sh"
   },
   "workspaces": [
     "projects/*",

@@ -18,7 +18,9 @@ const Error404Page = () => {
         <Button
           variant="contained"
           size="small"
-          onClick={() => (window.location.href = Environments.Domain)}
+          onClick={() =>
+            (window.location.href = Environments.Domain + "/inicio/")
+          }
         >
           Ir al inicio
         </Button>

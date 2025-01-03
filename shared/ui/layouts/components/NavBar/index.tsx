@@ -37,7 +37,9 @@ export const NavBar = () => {
           color="inherit"
           aria-label="menu"
           sx={{ ml: 1 }}
-          onClick={() => (window.location.href = Environments.Domain)}
+          onClick={() =>
+            (window.location.href = Environments.Domain + "/inicio/")
+          }
         >
           <img src={sma} alt="logo" width={"130px"} />
         </IconButton>

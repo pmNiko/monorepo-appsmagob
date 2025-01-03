@@ -69,9 +69,9 @@ jq --arg new_version "$NEW_VERSION" '.version = $new_version' package.json > pac
 echo "Versión actualizada en package.json: $NEW_VERSION"
 
 # Crear el tag en formato personalizado
-GIT_TAG="v$NEW_VERSION-$TAG_DATE-$SUFFIX"
+GIT_TAG="v$NEW_VERSION-$TAG_DATE$SUFFIX"
 git add .
-git commit -m "Release Candidate: $NEW_VERSION🏷️ - stage-$TAG_DATE🐳"
+git commit -m "Release Candidate: v$NEW_VERSION🏷️ stage-$TAG_DATE🐳"
 git tag "$GIT_TAG"
 git push
 git push origin "$GIT_TAG"
@@ -83,7 +83,7 @@ CREATE_RELEASE_RESPONSE=$(curl -s -X POST https://api.github.com/repos/$GITHUB_R
 -d "{
   \"tag_name\": \"$GIT_TAG\",
   \"name\": \"$GIT_TAG\",
-  \"body\": \"Release Candidate v$NEW_VERSION🏷️ - stage-$TAG_DATE🐳\",
+  \"body\": \"Release Candidate v$NEW_VERSION🏷️ stage-$TAG_DATE🐳\",
   \"draft\": false,
   \"prerelease\": true
 }")

@@ -69,7 +69,7 @@ jq --arg new_version "$NEW_VERSION" '.version = $new_version' package.json > pac
 echo "Versión actualizada en package.json: $NEW_VERSION"
 
 # Crear el tag en formato personalizado
-GIT_TAG="v$TAG_DATE-$NEW_VERSION$SUFFIX"
+GIT_TAG="v$NEW_VERSION-$TAG_DATE-$SUFFIX"
 git add .
 git commit -m "Release Candidate: $NEW_VERSION🏷️ - stage-$TAG_DATE🐳"
 git tag "$GIT_TAG"

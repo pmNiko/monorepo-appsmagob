@@ -36,8 +36,11 @@ if [[ -z "$CURRENT_VERSION" || ! "$CURRENT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ 
 fi
 
 # Configurar tags de Git
-PREVIOUS_TAG="v$TAG_DATE-$CURRENT_VERSION-rc" # Tag de staging
-STABLE_TAG="🏷️v$TAG_DATE-$CURRENT_VERSION"     # Tag estable
+PREVIOUS_TAG="v$CURRENT_VERSION-$TAG_DATE-rc" # Tag de staging
+STABLE_TAG="v$CURRENT_VERSION🏷️$TAG_DATE"     # Tag estable
+
+# Sanitar el tag para la API
+SANITIZED_TAG=$(echo "$STABLE_TAG" | sed 's/[🏷️]//g')
 
 # Verificar si el tag de staging existe
 if ! git rev-parse "$PREVIOUS_TAG" >/dev/null 2>&1; then
@@ -55,32 +58,39 @@ else
 fi
 
 # Verificar si la release ya existe en GitHub
-RELEASE_CHECK=$(curl -s -X GET https://api.github.com/repos/$GITHUB_REPO/releases/tags/$STABLE_TAG \
+RELEASE_CHECK=$(curl -s -X GET https://api.github.com/repos/$GITHUB_REPO/releases/tags/$SANITIZED_TAG \
 -H "Authorization: token $GITHUB_TOKEN")
 
-if [[ $(echo "$RELEASE_CHECK" | jq -r '.id') != "null" ]]; then
-  echo "La release para el tag $STABLE_TAG ya existe. No se creará una nueva."
-else
-  # Crear nueva release en GitHub como release estable
-  CREATE_RELEASE_RESPONSE=$(curl -s -X POST https://api.github.com/repos/$GITHUB_REPO/releases \
-  -H "Authorization: token $GITHUB_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"tag_name\": \"$STABLE_TAG\",
-    \"name\": \"$STABLE_TAG\",
-    \"body\": \"Stable release version: $NEW_VERSION🏷️ - prod-$TAG_DATE🐳\",
-    \"draft\": false,
-    \"prerelease\": false
-  }")
+if echo "$RELEASE_CHECK" | jq empty >/dev/null 2>&1; then
+  RELEASE_ID=$(echo "$RELEASE_CHECK" | jq -r '.id')
+  if [[ "$RELEASE_ID" != "null" ]]; then
+    echo "La release para el tag $STABLE_TAG ya existe. No se creará una nueva."
+  else
+    # Crear nueva release en GitHub como release estable
+    CREATE_RELEASE_RESPONSE=$(curl -s -X POST https://api.github.com/repos/$GITHUB_REPO/releases \
+    -H "Authorization: token $GITHUB_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "{
+      \"tag_name\": \"$STABLE_TAG\",
+      \"name\": \"$STABLE_TAG\",
+      \"body\": \"Stable release version: $CURRENT_VERSION🏷️ - prod-$TAG_DATE🐳\",
+      \"draft\": false,
+      \"prerelease\": false
+    }")
 
-  RELEASE_ID=$(echo "$CREATE_RELEASE_RESPONSE" | jq -r '.id')
-  if [[ "$RELEASE_ID" == "null" ]]; then
-    echo "Error al crear la release en GitHub."
-    echo "Respuesta: $CREATE_RELEASE_RESPONSE"
-    exit 1
+    RELEASE_ID=$(echo "$CREATE_RELEASE_RESPONSE" | jq -r '.id')
+    if [[ "$RELEASE_ID" == "null" ]]; then
+      echo "Error al crear la release en GitHub."
+      echo "Respuesta: $CREATE_RELEASE_RESPONSE"
+      exit 1
+    fi
+
+    echo "Release estable creada exitosamente: $STABLE_TAG"
   fi
-
-  echo "Release estable creada exitosamente: $STABLE_TAG"
+else
+  echo "Error: La respuesta de GitHub no es un JSON válido."
+  echo "Respuesta: $RELEASE_CHECK"
+  exit 1
 fi
 
 # Generar el build del frontend

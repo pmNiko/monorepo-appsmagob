@@ -101,9 +101,9 @@ if ! $BUILD_COMMAND; then
 fi
 
 # Construir y subir la imagen Docker
-docker build -f $DOCKERFILE -t $IMAGE_NAME:prod-$TAG_DATE -t $IMAGE_NAME:prod-latest .
-docker push $IMAGE_NAME:prod-$TAG_DATE
-docker push $IMAGE_NAME:prod-latest
+docker build -f $DOCKERFILE -t $IMAGE_NAME:$TAG_DATE -t $IMAGE_NAME:latest .
+docker push $IMAGE_NAME:$TAG_DATE
+docker push $IMAGE_NAME:latest
 
 # Eliminar la carpeta temporal de dist
 if [[ -d "$DIST_DIR" ]]; then

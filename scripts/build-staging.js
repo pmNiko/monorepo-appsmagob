@@ -4,7 +4,7 @@ const path = require("path");
 
 const projectsDir = path.resolve(__dirname, "../projects");
 const distStagingDir = path.resolve(__dirname, "../dist-staging");
-const supportDir = path.resolve(__dirname, "../support");
+const maintenanceDir = path.resolve(__dirname, "../maintenance");
 
 try {
   // Crear directorio `dist-staging` si no existe
@@ -12,13 +12,13 @@ try {
     fs.mkdirSync(distStagingDir, { recursive: true });
   }
 
-  // Copiar el directorio `support` a `dist-staging`
-  const supportDist = path.join(distStagingDir, "support");
-  if (fs.existsSync(supportDist)) {
-    fs.rmSync(supportDist, { recursive: true, force: true }); // Limpiar destino previo
+  // Copiar el directorio `maintenance` a `dist-staging`
+  const maintenanceDist = path.join(distStagingDir, "maintenance");
+  if (fs.existsSync(maintenanceDist)) {
+    fs.rmSync(maintenanceDist, { recursive: true, force: true }); // Limpiar destino previo
   }
-  fs.cpSync(supportDir, supportDist, { recursive: true });
-  console.log(`Copied support directory to ${supportDist}`);
+  fs.cpSync(maintenanceDir, maintenanceDist, { recursive: true });
+  console.log(`Copied support directory to ${maintenanceDist}`);
 
   // Leer todos los directorios en `projects`
   const projects = fs.readdirSync(projectsDir).filter((dir) => {

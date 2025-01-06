@@ -10,7 +10,7 @@ COPY ./dist-staging/errores /usr/share/nginx/html/errores
 COPY ./dist-staging/institucional /usr/share/nginx/html/institucional
 COPY ./dist-staging/rrhh /usr/share/nginx/html/rrhh
 COPY ./dist-staging/vivienda /usr/share/nginx/html/vivienda
-COPY ./dist-staging/support /usr/share/nginx/html/support
+COPY ./dist-staging/maintenance /usr/share/nginx/html/maintenance
 
 # Exponer el puerto 80
 EXPOSE 80

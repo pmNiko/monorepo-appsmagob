@@ -7,8 +7,8 @@ VERSION_TYPE=${1:-"patch"} # Tipo de incremento: "patch", "minor", "major". Por 
 TAG_DATE=$(date +'%Y-%m-%d')
 IMAGE_NAME="nikodev/appsmagob"
 BUILD_COMMAND="npm run build:staging"
-DOCKERFILE="Dockerfile.stage"
-DIST_DIR="dist-staging"
+DOCKERFILE="Dockerfile"
+DIST_DIR="dist"
 SUFFIX="-rc" # Sufijo para release candidate
 
 # Validar el tipo de versión

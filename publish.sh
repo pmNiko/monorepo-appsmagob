@@ -6,8 +6,8 @@
 TAG_DATE=$(date +'%Y-%m-%d')
 IMAGE_NAME="nikodev/appsmagob"
 BUILD_COMMAND="npm run build:prod"
-DOCKERFILE="Dockerfile.prod"
-DIST_DIR="dist-production"
+DOCKERFILE="Dockerfile"
+DIST_DIR="dist"
 SUFFIX="" # Sin sufijo para producción
 
 # Validar GITHUB_TOKEN

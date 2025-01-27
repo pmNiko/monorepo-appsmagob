@@ -4,7 +4,8 @@
       "baseUrl": ".",
       "paths": {
         "@infra/*": ["infra/*"],
-        "@ui/*": ["ui/*"]
+        "@ui/*": ["ui/*"],
+        "@custom-hooks/*": ["custom-hooks/*"],
       },
       "outDir": "./dist"
     },

@@ -5,11 +5,11 @@ import { useMacroClick } from "../hooks/useMacroClick";
 import { ParamsForMacroClick } from "../interface";
 
 interface Props {
-  disabled: boolean;
   params: ParamsForMacroClick;
   isTax?: boolean;
   tribu?: string;
   n_serie?: number;
+  mensualesDisponibles: boolean;
   anualdisponible: boolean;
   semestraldisponible: boolean;
 }
@@ -20,11 +20,11 @@ type TCuot = "1" | "X" | "Y";
 const receiptsList = Environments.Domain + "/rentas/recibos";
 
 export const TaxCardActions = ({
-  disabled,
   isTax = false,
   tribu,
   n_serie,
   params,
+  mensualesDisponibles,
   semestraldisponible,
   anualdisponible,
 }: Props) => {
@@ -32,7 +32,7 @@ export const TaxCardActions = ({
   const setSearchParams = useAuthStore((state) => state.setSearchParams);
   const handleMacroClick = useMacroClick({ params });
 
-  if (disabled) return;
+  if (!mensualesDisponibles && !semestraldisponible && !anualdisponible) return;
 
   const handleClickDetail = async (value: TCuot) => {
     if (isTax) {
@@ -55,6 +55,7 @@ export const TaxCardActions = ({
             textTransform: "capitalize",
             height: "2em",
             lineHeight: "2em",
+            display: mensualesDisponibles ? "" : "none",
           }}
           variant="contained"
           onClick={() => handleClickDetail("1")}
@@ -69,6 +70,7 @@ export const TaxCardActions = ({
             textTransform: "capitalize",
             height: "2em",
             lineHeight: "2em",
+            display: mensualesDisponibles ? "" : "none",
           }}
           variant="contained"
           onClick={handleMacroClick.paymentLink}
@@ -76,7 +78,13 @@ export const TaxCardActions = ({
           Pagar
         </Button>
 
-        <Box display={!semestraldisponible && !anualdisponible ? "none" : ""}>
+        <Box
+          display={
+            mensualesDisponibles && (semestraldisponible || anualdisponible)
+              ? ""
+              : "none"
+          }
+        >
           {" "}
           |{" "}
         </Box>

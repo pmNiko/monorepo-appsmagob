@@ -24,11 +24,13 @@ export const useTaxValidate = () => {
   const [targetForm, setTargetForm] = useState(Target.CuitCuil);
   const [validCaptcha, setValidCaptcha] = useState(false);
   const setSearchParams = useReceiptStore((state) => state.setSearchParams);
+  const setSearchByDefault = useReceiptStore(
+    (state) => state.setSearchByDefault
+  );
   const setTarget = useReceiptStore((state) => state.setTarget);
   const validator = useQueryState<ValidateByMD5Response, ValidateSearchParams>(
     FN_SGD.Validar_Tributo,
     {
-      mode: 'develop',
       singleObject: true,
       runAfter: {
         execute() {
@@ -36,7 +38,7 @@ export const useTaxValidate = () => {
             setSearchParams({
               tribu: validator.data?.tribu,
               n_serie: validator.data?.n_serie,
-              t_cuot: '1'
+              t_cuot: "1",
             });
             setTarget(validator.params.cuitcuil);
             navigate(Paths.LISTADO_DE_RECIBOS);
@@ -52,6 +54,7 @@ export const useTaxValidate = () => {
       tribu,
       datoabuscar,
     });
+    setSearchByDefault(datoabuscar);
   };
 
   return {

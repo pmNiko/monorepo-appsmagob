@@ -1,0 +1,75 @@
+import { useState } from "react";
+import moment from "moment";
+import { ReceiptAvailable, ReceiptResponse } from "../interfaces";
+
+const ESTA_EN_LEGALES = "EN LEGALES";
+
+/** Asigna el formato año-mes-dia */
+const format = (date: string) => {
+  return moment(date).format("YYYY-MM-DD");
+};
+
+/** Devuelve el monto y la fecha con la que hace match su vencimiento */
+const dateMatch = (tax: ReceiptResponse) => {
+  const current = moment().format("YYYY-MM-DD");
+
+  if (current <= format(tax.f_vto))
+    return { date: tax.f_vto, amount: tax.importe };
+
+  if (current > format(tax.f_vto) && current <= format(tax.f_vto1)) {
+    return { date: tax.f_vto1, amount: tax.importe1 };
+  }
+
+  return { date: tax.f_vto1, amount: tax.importeinteres };
+};
+
+/**
+ * ------- useReceiptAdapter --------
+ * - Adapter de recibos
+ *  * Su método **adapter** recibe los items de tipo ReceiptResponse[]
+ *  * Determina si tiene deuda **en legales**
+ *  * Filtra todos los tributos que se encuentrán habilitados para ser pagados
+ *  * Determina en cada recibo fecha y monto a pagar segun vencimiento
+ *  * Responde si existen recibos disponibles invocando su método **areReceiptsAvailable**
+ */
+export const useReceiptAdapter = () => {
+  const [receiptsAdapted, setReceiptsAdapted] = useState(
+    [] as ReceiptAvailable[]
+  );
+  const [estaEnLegales, setEstaEnlegales] = useState(false);
+
+  const adapter = (items: ReceiptResponse[]) => {
+    const estaEnLegales = items.some(
+      (receipt) => receipt.enlegales === ESTA_EN_LEGALES
+    );
+    const receiptsAvailable = items.filter(
+      (receipt) => receipt.enlegales !== ESTA_EN_LEGALES
+    );
+
+    console.log({ recibosValidos: receiptsAvailable });
+
+    const receiptsTransform: ReceiptAvailable[] = receiptsAvailable.map(
+      (receipt) => {
+        const { date, amount } = dateMatch(receipt);
+        console.log({ date, amount });
+
+        return { ...receipt, date, amount };
+      }
+    );
+
+    setEstaEnlegales(estaEnLegales);
+    setReceiptsAdapted(receiptsTransform);
+  };
+
+  const areReceiptsAvailable = () => receiptsAdapted.length > 0;
+
+  return {
+    //** Properties
+    receiptsAdapted,
+    estaEnLegales,
+
+    //?? Methods
+    areReceiptsAvailable,
+    adapter,
+  };
+};

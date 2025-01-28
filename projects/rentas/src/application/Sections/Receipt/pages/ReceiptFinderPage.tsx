@@ -1,5 +1,5 @@
 import { Paths } from "#application/Router";
-import { useRedirectAfterLogin, disableButton } from "@shared/infra";
+import { disableButton, useRedirectAfterLogin } from "@shared/infra";
 import {
   Captcha,
   CustomPopUp,
@@ -45,13 +45,25 @@ const FORM_VALUES = {
 };
 
 const ReceiptFinderPage = () => {
+  const [openSelect, setOpenSelect] = useState(false);
   useRedirectAfterLogin({ path: Paths.LISTADO_DE_RECIBOS });
   const callbackMacroClick = useCallbackMacroResponse();
   const validator = useTaxValidate();
 
+  useEffect(() => {
+    setTimeout(() => {
+      setOpenSelect(true);
+    }, 800);
+  }, []);
+
   return (
-    <MunismaCard title="Pago online" lg={3} minHeight={"60vh"}>
-      <Box textAlign="center">
+    <MunismaCard
+      title="Pago online"
+      lg={3}
+      minHeight={"60vh"}
+      justifyTarget="space-evenly"
+    >
+      <Box textAlign="center" mt={-4}>
         <Formik
           initialValues={initialValues}
           validationSchema={Yup.object({
@@ -68,7 +80,7 @@ const ReceiptFinderPage = () => {
         >
           {({ handleChange, values, resetForm }) => (
             <Form>
-              <FormControl sx={{ gap: 3 }}>
+              <FormControl sx={{ gap: 4 }}>
                 <FormControl fullWidth>
                   <Select
                     disabled={validator.isLoading}
@@ -76,6 +88,8 @@ const ReceiptFinderPage = () => {
                     id={FORM_VALUES.TRIBU}
                     name={FORM_VALUES.TRIBU}
                     value={values.tribu}
+                    open={openSelect}
+                    onClick={() => setOpenSelect(!openSelect)}
                     onChange={(e) => {
                       resetForm({
                         values: {
@@ -84,6 +98,7 @@ const ReceiptFinderPage = () => {
                         },
                       });
                       validator.setTargetForm(getTargetByValue(e.target.value));
+                      setOpenSelect(false);
                     }}
                   >
                     {Object.values(Tributos).map((tax, i) => (
@@ -128,7 +143,7 @@ const ReceiptFinderPage = () => {
 
                 <Captcha setValidCaptcha={validator.setValidCaptcha} />
 
-                <Box mt={1} mb={4} width={"80%"} mx="auto">
+                <Box mt={1} mb={4} sx={{ width: "80%", m: "auto" }}>
                   <Button
                     disabled={
                       validator.isLoading ||
@@ -150,7 +165,7 @@ const ReceiptFinderPage = () => {
             </Form>
           )}
         </Formik>
-        <Box mb={4}></Box>
+        <Box mb={6}></Box>
       </Box>
 
       {/* ------------- Notificaciones al usuario -------------- */}

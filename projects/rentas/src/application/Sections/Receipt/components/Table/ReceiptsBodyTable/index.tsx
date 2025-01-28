@@ -2,7 +2,7 @@ import { ItemTable } from "@shared/ui";
 import { Box, Typography } from "@mui/material";
 import { MRT_ColumnDef } from "material-react-table";
 import { useEffect, useMemo, useState } from "react";
-import { RecibosListarResp, Taxes } from "../../../interfaces";
+import { RecibosListarResp, T_Cuot, Taxes } from "../../../interfaces";
 
 interface ReceiptsTableProps {
   isLoading?: boolean;
@@ -10,6 +10,7 @@ interface ReceiptsTableProps {
   tax?: string;
   setSelection: (items: Array<string>) => void;
   selectionExists: boolean;
+  t_cuot?: T_Cuot;
 }
 
 type ColGroupping = "t_cuotdescr" | "colgroup";
@@ -24,6 +25,17 @@ const grouppingTax = (tax: string) => {
       : "t_cuotdescr";
 
   return groupping;
+};
+
+const periodSelected = (t_cuot?: T_Cuot) => {
+  switch (t_cuot) {
+    case "X":
+      return "Semestrales";
+    case "Y":
+      return "Anuales";
+    default:
+      return "Mensuales";
+  }
 };
 
 /** ReceiptsBodyTable
@@ -41,6 +53,7 @@ export const ReceiptsBodyTable = ({
   tax,
   setSelection,
   selectionExists,
+  t_cuot,
 }: ReceiptsTableProps) => {
   const [colGrouppingTax, setcolGrouppingTax] = useState<ColGroupping>(
     "colgroup"
@@ -130,7 +143,17 @@ export const ReceiptsBodyTable = ({
       extraInvisibleColumn={extraInvisibleColumn}
       heigth={350}
       isLoading={isLoading}
-      msgFallback="No hay recibos para mostrar"
+      msgFallback={
+        <Typography
+          my={10}
+          pl={2}
+          variant="subtitle1"
+          fontSize={{ xs: 16, sm: 18, md: 22 }}
+          textAlign={{ xs: "left", sm: "left", md: "center" }}
+        >
+          No hay recibos <b>{periodSelected(t_cuot)}</b> para pagar
+        </Typography>
+      }
       rowKey="n_recibo"
       data={receiptsTable}
       setSelection={setSelection}

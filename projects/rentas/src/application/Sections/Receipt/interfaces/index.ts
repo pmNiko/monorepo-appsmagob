@@ -1,4 +1,3 @@
-
 export interface ValidateResponse {
   tribu: string;
   n_serie: number;
@@ -15,8 +14,6 @@ export interface ValidateSearchParams {
   cuitcuil: string | number;
   datoabuscar: string;
 }
-
-
 
 export enum Taxes {
   Nomenclatura = "01",
@@ -35,23 +32,16 @@ export interface MacroClickProps {
   montoProductos: string;
 }
 
-
-
 /** ---------- Cambio en la busqueda de recibos---------------- */
 
-
-export type T_Cuot = '1' | 'x' | 'y'
-
-
+export type T_Cuot = "1" | "X" | "Y";
 
 export interface RecibosListarParams {
   tribu?: string;
   n_serie?: number;
   t_cuot?: T_Cuot;
-  md5?: string
+  md5?: string;
 }
-
-
 
 /**
  * Respuesta de busqueda de tributos a pagar
@@ -59,20 +49,20 @@ export interface RecibosListarParams {
  * * fvalidez:  fecha de pago
  * * periodo:   periodo del tributo
  * * importe:   monto a pagar
- * * t_cuot:   
+ * * t_cuot:
  *      - '01': Todos los tipos de cuota
  *      - 'X':  Tipo de cuota Semestral
  *      - 'Y':  Tipo de cuota Anual
  */
 export interface RecibosListarResp {
   colgroup: string;
-  email: string;   // + 
+  email: string; // +
   enlegales: boolean;
   fvalidez: Date;
   importe: number;
   n_recibo: number;
   n_serie: number;
-  periodo: Date;   // +       
+  periodo: Date; // +
   relaciontributo: string;
   t_cuot: T_Cuot;
   t_cuotdescr: string;
@@ -81,5 +71,3 @@ export interface RecibosListarResp {
   tribuabrev: string;
   tribudescr: string;
 }
-
-

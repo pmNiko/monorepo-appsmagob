@@ -41,7 +41,6 @@ export const TaxDetails = ({ taxList }: Props) => {
           </Stack>
 
           <TaxCardActions
-            disabled={!tax.recibos}
             isTax
             tribu={tax.tribu}
             n_serie={tax.n_serie}
@@ -50,6 +49,7 @@ export const TaxDetails = ({ taxList }: Props) => {
               productos: tax.productos!,
               montoProductos: tax.montoproductos!,
             }}
+            mensualesDisponibles={!!tax.recibos}
             semestraldisponible={tax.semestraldisponible}
             anualdisponible={tax.anualdisponible}
           />

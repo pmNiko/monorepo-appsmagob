@@ -1,11 +1,8 @@
-
-
 export interface ParamsForMacroClick {
   recibos: string;
   productos: string;
   montoProductos: string;
 }
-
 
 /** ------ Detalles de los tributos -------- */
 export interface DetallesContribuyenteResp {
@@ -23,13 +20,12 @@ export interface DetallesContribuyenteResp {
   anualdisponible: boolean;
 }
 
-
 export interface DetallesContribuyenteTributosResp {
   tribu: string;
   n_serie: number;
   tribuabrev: string;
   titulo: string;
-  email: null;
+  email: string;
   relaciontributo: string;
   deudaenlegales: boolean;
   deudauvi: boolean;
@@ -41,4 +37,3 @@ export interface DetallesContribuyenteTributosResp {
   semestraldisponible: boolean;
   anualdisponible: boolean;
 }
-

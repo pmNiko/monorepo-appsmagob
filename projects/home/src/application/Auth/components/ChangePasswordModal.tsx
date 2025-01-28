@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { ErrorMessage, Form, Formik } from "formik";
 import * as Yup from "yup";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
   Button,
@@ -9,8 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { CustomModal, CustomPopUp, ToggleVisibilityPassword } from "@shared/ui";
-import { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
   isActive: boolean;

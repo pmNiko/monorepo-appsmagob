@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { Paths } from "#application/Router";
 import { useRedirectPreviousPage, useAuthStore } from "@shared/infra";
-import { useState } from "react";
 import { useQueryState } from "usequerymunisma";
 import { TributosResponse } from "../interfaces";
 import { Tributos } from "../shared";

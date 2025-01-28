@@ -6,6 +6,7 @@ import { processSelectionDetails, processValidData } from "./helpers";
 type State = {
   //?? finder
   searchParams: RecibosListarParams;
+  searchByDefault: string;
   target: string | number;
 
   //* Datos para cargar la tabla
@@ -23,6 +24,7 @@ type State = {
 type Actions = {
   // Acciones para el finder
   setSearchParams: (searchParams: RecibosListarParams) => void;
+  setSearchByDefault: (searchByDefault: string) => void;
   setTarget: (target: string | number) => void;
 
   // Toggle mensual/semestral/anual
@@ -42,6 +44,7 @@ type Actions = {
 
 const initialStoreState: State = {
   searchParams: { n_serie: 0, tribu: "", t_cuot: "1" },
+  searchByDefault: "",
   target: "",
 
   receiptsTable: [],
@@ -58,6 +61,8 @@ const storeApi: StateCreator<State & Actions> = (set, get) => ({
   ...initialStoreState,
 
   setSearchParams: (searchParams) => set(() => ({ searchParams })),
+
+  setSearchByDefault: (searchByDefault) => set(() => ({ searchByDefault })),
 
   setTarget: (target) => set(() => ({ target })),
 

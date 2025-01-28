@@ -2,7 +2,7 @@ import { RecibosListarResp } from "../../interfaces";
 
 export const processValidData = (data: RecibosListarResp[]) => {
   const receiptsTable = data.filter((ele) => !ele.enlegales);
-  const hasLegalReceipts = receiptsTable.some((ele) => ele.enlegales);
+  const hasLegalReceipts = data.some((ele) => ele.enlegales);
 
   return {
     receiptsTable,

@@ -41,12 +41,12 @@ export const PersonalData = ({ tax }: Props) => {
       </Stack>
 
       <TaxCardActions
-        disabled={!tax.recibos}
         params={{
           recibos: tax.recibos!,
           productos: tax.productos!,
           montoProductos: tax.montoproductos!,
         }}
+        mensualesDisponibles={!!tax.recibos}
         semestraldisponible={tax.semestraldisponible}
         anualdisponible={tax.anualdisponible}
       />

@@ -1,4 +1,5 @@
-import { CustomModal } from "@shared/ui";
+import { ErrorMessage, Form, Formik } from "formik";
+import * as Yup from "yup";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
@@ -8,8 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ErrorMessage, Form, Formik } from "formik";
-import * as Yup from "yup";
+import { CustomModal } from "@shared/ui";
 
 interface Props {
   isActive: boolean;

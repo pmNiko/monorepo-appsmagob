@@ -1,4 +1,4 @@
-import { InfoModalResponse, MunismaCard } from "@shared/ui";
+import { MunismaCard } from "@shared/ui";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import {
   ReceiptsBodyTable,
@@ -7,9 +7,19 @@ import {
 } from "../components";
 import { useReceiptFinder } from "../hooks";
 import { T_Cuot, Taxes } from "../interfaces";
+import { useEffect, useState } from "react";
 
 const ReceiptsTablePage = () => {
+  const [openSelect, setOpenSelect] = useState(false);
   const finder = useReceiptFinder();
+
+  useEffect(() => {
+    if (finder.selectorIsVisibility() === "visible") {
+      setTimeout(() => {
+        setOpenSelect(true);
+      }, 800);
+    }
+  }, []);
 
   return (
     <MunismaCard sm={11} md={10} lg={6} mb={5}>
@@ -29,6 +39,8 @@ const ReceiptsTablePage = () => {
               value={finder.params.t_cuot || "1"}
               onChange={({ target }) => finder.setTCout(target.value as T_Cuot)}
               disabled={finder.isLoading}
+              open={openSelect}
+              onClick={() => setOpenSelect(!openSelect)}
             >
               <MenuItem value={"1"}>Mensual</MenuItem>
               <MenuItem value={"X"}>Semestral</MenuItem>
@@ -44,6 +56,7 @@ const ReceiptsTablePage = () => {
         setSelection={finder.setSelection}
         receiptsTable={finder.receiptsTable}
         selectionExists={finder.selectionExists}
+        t_cuot={finder.params.t_cuot}
       />
 
       <ReceiptsFooterTable
@@ -56,13 +69,7 @@ const ReceiptsTablePage = () => {
         selectedItems={finder.selectedItems}
       />
 
-      <InfoModalResponse notify={finder.notify} />
-      {/* <>
-          <Typography variant="subtitle2">
-            No se registran recibos adeudados con los parámetros ingresados{" "}
-          </Typography>
-        </>
-      </InfoModalResponse> */}
+      {/* <InfoModalResponse notify={finder.notify} /> */}
     </MunismaCard>
   );
 };

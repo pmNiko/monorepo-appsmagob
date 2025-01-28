@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useMessageToast } from "toast-munisma";
 import { Environments, useRequestAPI, getHttpIP } from "@shared/infra";
+
 import { Paths } from "#application/Router";
 
 const uri = Environments.Domain + "/api/macro/payMacroForEmail";

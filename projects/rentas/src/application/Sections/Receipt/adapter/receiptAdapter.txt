@@ -1,0 +1,50 @@
+import moment from "moment";
+import { ReceiptAvailable, ReceiptResponse } from "../interfaces";
+
+export interface ReceiptAdapter {
+  estaEnLegales: boolean;
+  receipts: ReceiptAvailable[];
+}
+
+const ESTA_EN_LEGALES = "EN LEGALES";
+
+/** Asigna el formato año-mes-dia */
+const format = (date: string) => {
+  return moment(date).format("YYYY-MM-DD");
+};
+
+/** Devuelve el monto y la fecha con la que hace match su vencimiento */
+const dateMatch = (tax: ReceiptResponse) => {
+  const current = moment().format("YYYY-MM-DD");
+
+  if (current <= format(tax.f_vto))
+    return { date: tax.f_vto, amount: tax.importe };
+
+  if (current > format(tax.f_vto) && current <= format(tax.f_vto1)) {
+    return { date: tax.f_vto1, amount: tax.importe1 };
+  }
+
+  tax.importeinteres === null &&
+    console.error("Falta actualizar la tabla t01tactu");
+  return { date: tax.f_vto1, amount: tax.importeinteres };
+};
+
+export const receiptAdapter = (items: ReceiptResponse[]) => {
+  const estaEnLegales = items.some(
+    (receipt) => receipt.enlegales === ESTA_EN_LEGALES
+  );
+  const receiptsAvailable = items.filter(
+    (receipt) => receipt.enlegales !== ESTA_EN_LEGALES
+  );
+
+  const receipts: ReceiptAvailable[] = receiptsAvailable.map((receipt) => {
+    const { date, amount } = dateMatch(receipt);
+
+    return { ...receipt, date, amount };
+  });
+
+  return {
+    estaEnLegales,
+    receipts,
+  };
+};
